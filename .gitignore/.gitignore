@@ -123,3 +123,4 @@ int colocar_barcos(int n, char **tablero){
     ndestructor=ndestructor-1;
   }
  }
+ 
