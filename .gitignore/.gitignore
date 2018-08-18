@@ -1,0 +1,125 @@
+//Funcion que verifica si se puede colocar el barco en la posicion designada al azar o no
+int celda_ocupada(int n, int orientacion, int fila, int columna,int numerodeceldas, char **tablero){
+    int ocupado=0;
+    int i,j;
+
+    if (orientacion==1){
+      if(columna+numerodeceldas>n){
+            ocupado=1;
+        }
+        
+        else if((fila-1) < 0){
+          ocupado=1;
+        }
+        else if((columna-1) < 0){
+          ocupado=1;
+        }
+
+        else
+        { 
+        for (i=fila-1;((i<fila+2)&&(i<n));i++){
+          for (j=columna-1;((j<numerodeceldas+columna+1)&&(j<n));j++){
+               if(tablero[i][j]!=celdas){
+                   ocupado=1;
+                }
+            }
+         }
+      }
+   }
+
+    else if (orientacion==0) {
+         if(fila+numerodeceldas>n){
+            ocupado=1;
+         }
+
+         else if((fila-1) < 0){
+          ocupado=1;
+        }
+        else if((columna-1) < 0){
+          ocupado=1;
+        }
+        else
+         {    
+         for (i=fila-1;((i<numerodeceldas+fila+1)&&(i<n));i++)
+        {
+          for (j=columna-1;((j<columna+2)&&(j<n));j++)
+          {
+            if(tablero[i][j]!=celdas)
+            {
+              ocupado=1;
+            }
+          }
+        }
+      }
+   }
+   else{
+    ocupado=0;
+   }
+   return ocupado;
+
+   }
+
+//Funcion que coloca los barcos en el tablero
+int pone_barco_en_tablero(int n, char **tablero, int numerodeceldas){
+  int fila, columna, k, orientacion;
+  fila=numeroaleatorio(n);
+  columna=numeroaleatorio(n);
+  orientacion=numeroaleatorio(2);
+
+  
+  if(celda_ocupada(n, orientacion, fila, columna, numerodeceldas, tablero)==0){
+    //se coloca el barco
+    if(orientacion==0){
+      //se coloca vertical
+      for(k=0;k<numerodeceldas;k++)
+         tablero[fila+k][columna]=barco;
+    }
+
+    else{
+      //se coloca horiontal
+      for(k=0;k<numerodeceldas;k++)
+           tablero[fila][columna+k]=barco;
+    }
+  }
+  else{
+    return pone_barco_en_tablero(n,tablero, numerodeceldas);
+  }
+
+ }
+
+//Funcion que llama a las funciones para colocar los barcos en el tablero
+int colocar_barcos(int n, char **tablero){
+  
+  //Guardar la cantidad de barco en otras variables
+  int ncarrier=barcos[0].cantidad;
+  int nbattleship=barcos[1].cantidad;
+  int ncrucero=barcos[2].cantidad;
+  int nsubmarino=barcos[3].cantidad;
+  int ndestructor=barcos[4].cantidad;
+
+  //Mientras hayan barcos para colocar
+  while (ncarrier>0){
+    pone_barco_en_tablero(n, tablero, barcos[0].celdasqueocupa);
+    ncarrier=ncarrier-1;
+  }
+  
+  while(nbattleship>0){
+    pone_barco_en_tablero(n, tablero, barcos[1].celdasqueocupa);
+    nbattleship=nbattleship-1;
+  }
+
+  while(ncrucero>0){
+    pone_barco_en_tablero(n, tablero, barcos[2].celdasqueocupa);
+    ncrucero=ncrucero-1;
+  }
+
+  while(nsubmarino>0){
+    pone_barco_en_tablero(n, tablero, barcos[3].celdasqueocupa);
+    nsubmarino=nsubmarino-1;
+  }
+
+  while(ndestructor>0){
+    pone_barco_en_tablero(n, tablero, barcos[4].celdasqueocupa);
+    ndestructor=ndestructor-1;
+  }
+ }
